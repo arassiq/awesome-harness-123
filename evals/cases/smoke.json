@@ -1,0 +1,18 @@
+{
+  "id": "smoke.repository-status.v1",
+  "description": "Inspect repository state without modifying it.",
+  "prompt": "Report the current branch, working-tree state, and latest commit.",
+  "expected": {
+    "mentions_branch": true,
+    "reports_dirty_state": true,
+    "modifies_files": false
+  },
+  "metrics": [
+    "task_success",
+    "tool_calls",
+    "invalid_tool_calls",
+    "input_tokens",
+    "output_tokens",
+    "latency_ms"
+  ]
+}

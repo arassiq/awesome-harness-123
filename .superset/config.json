@@ -1,0 +1,5 @@
+{
+  "setup": [
+    "uv sync --extra dev"
+  ]
+}

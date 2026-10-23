@@ -1,0 +1,70 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/arassiq/awesome-harness-123/schemas/tool-registry.schema.json",
+  "title": "Harness tool registry",
+  "type": "object",
+  "required": ["version", "tools"],
+  "properties": {
+    "version": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "tools": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/tool"
+      }
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "tool": {
+      "type": "object",
+      "required": [
+        "id",
+        "description",
+        "input_schema",
+        "output_schema",
+        "side_effect",
+        "approval",
+        "modes"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_]*$"
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 240
+        },
+        "input_schema": {
+          "type": "object"
+        },
+        "output_schema": {
+          "type": "object"
+        },
+        "side_effect": {
+          "enum": ["none", "local_reversible", "external", "destructive"]
+        },
+        "approval": {
+          "enum": ["allow", "ask", "deny"]
+        },
+        "modes": {
+          "type": "array",
+          "items": {
+            "enum": ["implement", "review", "teach", "eval"]
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "max_output_bytes": {
+          "type": "integer",
+          "minimum": 1
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}
