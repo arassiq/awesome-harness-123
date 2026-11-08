@@ -24,6 +24,10 @@ harness = "awesome_harness.cli:main"
 [tool.hatch.build.targets.wheel]
 packages = ["src/awesome_harness"]
 
+[tool.hatch.build.targets.wheel.force-include]
+"norms" = "awesome_harness/bundled_norms"
+"scaffold" = "awesome_harness/bundled_scaffold"
+
 [tool.pytest.ini_options]
 addopts = "-q"
 testpaths = ["tests"]

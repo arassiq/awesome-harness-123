@@ -1,0 +1,212 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/arassiq/awesome-harness-123/schemas/norm.schema.json",
+  "title": "Harness coding norm frontmatter",
+  "description": "Proposed runtime-neutral metadata contract for one Markdown coding norm.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "id",
+    "version",
+    "title",
+    "summary",
+    "status",
+    "priority",
+    "delivery",
+    "scope",
+    "relations",
+    "provenance"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9]*(?:[._-][a-z0-9]+)*$",
+      "maxLength": 120
+    },
+    "version": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 100
+    },
+    "summary": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 240
+    },
+    "status": {
+      "enum": ["draft", "active", "deprecated"]
+    },
+    "priority": {
+      "enum": ["required", "advisory"]
+    },
+    "delivery": {
+      "enum": ["always", "scoped", "on_demand"]
+    },
+    "scope": {
+      "$ref": "#/$defs/scope"
+    },
+    "relations": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/relation"
+      }
+    },
+    "provenance": {
+      "$ref": "#/$defs/provenance"
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "selectorList": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 160
+      },
+      "uniqueItems": true
+    },
+    "scope": {
+      "type": "object",
+      "properties": {
+        "areas": {
+          "$ref": "#/$defs/selectorList"
+        },
+        "languages": {
+          "$ref": "#/$defs/selectorList"
+        },
+        "paths": {
+          "$ref": "#/$defs/selectorList"
+        },
+        "tasks": {
+          "$ref": "#/$defs/selectorList"
+        }
+      },
+      "additionalProperties": false
+    },
+    "relation": {
+      "type": "object",
+      "required": ["type", "target"],
+      "properties": {
+        "type": {
+          "enum": [
+            "requires",
+            "conflicts",
+            "supersedes",
+            "example_of",
+            "related_to"
+          ]
+        },
+        "target": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9]*(?:[._-][a-z0-9]+)*$",
+          "maxLength": 120
+        }
+      },
+      "additionalProperties": false
+    },
+    "provenance": {
+      "type": "object",
+      "required": ["kind", "source"],
+      "properties": {
+        "kind": {
+          "enum": ["repository", "upstream", "personal", "external"]
+        },
+        "source": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500
+        },
+        "owner": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120
+        },
+        "reviewed_at": {
+          "type": "string",
+          "format": "date"
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "delivery": {
+            "const": "always"
+          }
+        },
+        "required": ["delivery"]
+      },
+      "then": {
+        "properties": {
+          "priority": {
+            "const": "required"
+          },
+          "scope": {
+            "maxProperties": 0
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "delivery": {
+            "const": "scoped"
+          }
+        },
+        "required": ["delivery"]
+      },
+      "then": {
+        "properties": {
+          "scope": {
+            "anyOf": [
+              {
+                "required": ["areas"],
+                "properties": {
+                  "areas": {
+                    "minItems": 1
+                  }
+                }
+              },
+              {
+                "required": ["languages"],
+                "properties": {
+                  "languages": {
+                    "minItems": 1
+                  }
+                }
+              },
+              {
+                "required": ["paths"],
+                "properties": {
+                  "paths": {
+                    "minItems": 1
+                  }
+                }
+              },
+              {
+                "required": ["tasks"],
+                "properties": {
+                  "tasks": {
+                    "minItems": 1
+                  }
+                }
+              }
+            ]
+          }
+        }
+      }
+    }
+  ]
+}
