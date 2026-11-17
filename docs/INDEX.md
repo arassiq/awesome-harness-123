@@ -18,6 +18,8 @@
   graph-assisted RAG research direction.
 - `research/tool-use-optimization.md` — planned OpenCode tool-use experiments.
 - `research/opencode-cliff-adapter.md` — Cliff/OpenCode integration evidence and safety gates.
+- `research/agent-coordination-context.md` — bounded agent communication, deterministic
+  verification, and stale-safe repository navigation.
 
 ## Evaluation
 
